@@ -1,6 +1,6 @@
 ---
 layout: default
-title: DataStax Node.js driver for Apache Cassandra
+title: Getting started with DataStax Node.js driver for Apache Cassandra
 active: start
 ---
 
