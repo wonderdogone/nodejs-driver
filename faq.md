@@ -19,20 +19,3 @@ Normally you should use 1 client instance per application domain, you should sha
 
 ## Should I shutdown the pool after executing a query?
 No, you should only call `client.shutdown` once in your application lifetime.
-
-
-## Basic usage
-
-<pre><code class="javascript">
-var driver = require('cassandra-driver');
-var client = new driver.Client({contactPoints: ['host1', 'host2'], keyspace: 'ks1'});
-var query = 'SELECT email, last_name FROM user_profiles WHERE key=?';
-client.execute(query, ['guy'], function(err, result) {
-  console.log('got user profile with email ' + result.rows[0].email);
-});
-</code>
-</pre>
-
-
-  [download]: https://www.npmjs.org/package/cassandra-driver
-  
