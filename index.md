@@ -5,9 +5,9 @@ active: home
 ---
 
 
-# DataStax Node.js driver for Apache Cassandra
+# Documentation
 
-Node.js driver for Apache Cassandra. This driver works exclusively with the Cassandra Query Language version 3 (CQL3) and Cassandra's native protocol.
+Documentation index for the DataStax Node.js driver for Apache Cassandra. 
 
 ## Basics
 

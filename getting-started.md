@@ -14,13 +14,15 @@ Getting started with the DataStax Node.js driver for Apache Cassandra.
 To connect to a Cassandra cluster, you need to provide at least 1 node of the cluster, 
  if there are more nodes than the ones provided, the driver will add it for you once it connects to the first node.
 
-```javascript
+<pre><code class="javascript">
 var driver = require('cassandra-driver');
 var client = new driver.Client({contactPoints: ['host1']});
 client.connect(function (err) {
   
 });
-```
+</code>
+</pre>
+
 Even though calling connect is not required (the execute method internally calls connect), it is recommended you call to `connect` 
  on application startup, this way you can ensure that you start your app only if your Cassandra cluster is up.
 

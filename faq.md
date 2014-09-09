@@ -14,7 +14,7 @@ On future versions, any Cassandra version from 1.2 will be supported.
 ## Which CQL version does this driver support?
 It supports [CQL3](http://cassandra.apache.org/doc/cql3/CQL.html).
 
-## Should I create a `Client` instance per repository module?
+## Should I create a `Client` instance per module in my app?
 Normally you should use 1 client instance per application domain, you should share that instance between modules within your application.
 
 ## Should I shutdown the pool after executing a query?

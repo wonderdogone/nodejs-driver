@@ -50,9 +50,7 @@ Consider the following example:
 
 <pre><code class="javascript">
 var key = 1000;
-client.execute('SELECT * FROM table1 where key = ?', [key], function(err, result) {
-  
-});
+client.execute('SELECT * FROM table1 where key = ?', [key], callback);
 </code>
 </pre>
 
@@ -67,13 +65,12 @@ Another benefit of prepared statements is that the driver will get the parameter
 Using the previous example, setting the prepare flag in the queryOptions will fix it:
 
 <pre><code class="javascript">
-client.execute('SELECT * FROM table1 where key = ?', [key], {prepare: true}, function(err, result) {
-  
-});
+//prepare the query before execution
+client.execute('SELECT * FROM table1 where key = ?', [key], {prepare: true}, callback);
 </code>
 </pre>
 
-When using prepare statements, the driver will prepare once on each host and 
+When using prepare statements, the driver will prepare the statement once on each host to execute multiple times.
 
 ### Hinting the target types
 
@@ -81,9 +78,7 @@ Providing `hints` in the query options is another way around it.
 
 <pre><code class="javascript">
 //Hint: the first parameter is an integer
-client.execute('SELECT * FROM table1 where key = ?', [key], {hints: ['int']}, function(err, result) {
-  
-});
+client.execute('SELECT * FROM table1 where key = ?', [key], {hints: ['int']}, callback);
 </code>
 </pre>
 
