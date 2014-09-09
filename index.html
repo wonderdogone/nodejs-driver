@@ -1,0 +1,406 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>DataStax Node.js Driver for Apache Cassandra by datastax</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>DataStax Node.js Driver for Apache Cassandra</h1>
+        <p>DataStax Node.js Driver for Apache Cassandra</p>
+
+        <p class="view"><a href="https://github.com/datastax/nodejs-driver">View the Project on GitHub <small>datastax/nodejs-driver</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/datastax/nodejs-driver/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/datastax/nodejs-driver/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/datastax/nodejs-driver">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="datastax-nodejs-driver-for-apache-cassandra" class="anchor" href="#datastax-nodejs-driver-for-apache-cassandra"><span class="octicon octicon-link"></span></a>DataStax Node.js Driver for Apache Cassandra</h1>
+
+<p>Node.js driver for <a href="http://cassandra.apache.org/">Apache Cassandra</a>. This driver works exclusively with the Cassandra Query Language version 3 (CQL3) and Cassandra's native protocol.</p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<div class="highlight highlight-bash"><pre><span class="nv">$ </span>npm install cassandra-driver
+</pre></div>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<ul>
+<li>Nodes discovery</li>
+<li>Configurable load balancing</li>
+<li>Transparent failover</li>
+<li>Tunability</li>
+<li>Row streaming</li>
+<li>Prepared statements and query batches</li>
+</ul><h2>
+<a name="basic-usage" class="anchor" href="#basic-usage"><span class="octicon octicon-link"></span></a>Basic usage</h2>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">driver</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'cassandra-driver'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">Client</span><span class="p">({</span><span class="nx">contactPoints</span><span class="o">:</span> <span class="p">[</span><span class="s1">'host1'</span><span class="p">,</span> <span class="s1">'host2'</span><span class="p">],</span> <span class="nx">keyspace</span><span class="o">:</span> <span class="s1">'ks1'</span><span class="p">});</span>
+<span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="s1">'SELECT email, last_name FROM user_profiles WHERE key=?'</span><span class="p">;</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="p">[</span><span class="s1">'guy'</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'got user profile with email '</span> <span class="o">+</span> <span class="nx">result</span><span class="p">.</span><span class="nx">rows</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">email</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h2>
+<a name="getting-help" class="anchor" href="#getting-help"><span class="octicon octicon-link"></span></a>Getting Help</h2>
+
+<p>You can use the project <a href="https://groups.google.com/a/lists.datastax.com/forum/#!forum/nodejs-driver-user">Mailing list</a> or create a ticket on the <a href="https://datastax-oss.atlassian.net/browse/NODEJS">Jira issue tracker</a>.</p>
+
+<h2>
+<a name="api" class="anchor" href="#api"><span class="octicon octicon-link"></span></a>API</h2>
+
+<ul>
+<li>
+<a href="#client">Client</a> class</li>
+<li>
+<a href="#types">types</a> module</li>
+<li>
+<a href="#policies">policies</a> module</li>
+<li>
+<a href="#auth">auth</a> module</li>
+</ul><h3>
+<a name="client" class="anchor" href="#client"><span class="octicon octicon-link"></span></a>Client</h3>
+
+<p>The <code>Client</code> maintains a pool of opened connections to the hosts to avoid several time-consuming steps that are involved with the setup of a CQL binary protocol connection (socket connection, startup message, authentication, ...).</p>
+
+<p><em>Usually you need one Client instance per Cassandra cluster.</em></p>
+
+<h4>
+<a name="new-clientoptions" class="anchor" href="#new-clientoptions"><span class="octicon octicon-link"></span></a>new Client(options)</h4>
+
+<p>Constructs a new client object.</p>
+
+<h4>
+<a name="clientconnectcallback" class="anchor" href="#clientconnectcallback"><span class="octicon octicon-link"></span></a>client.connect([callback])</h4>
+
+<p>Connects / warms up the pool.</p>
+
+<p>It ensures the pool is connected. It is not required to call it, internally the driver will call to <code>connect</code> when executing a query.</p>
+
+<p>The optional <code>callback</code> parameter will be executed when the pool is connected. If the pool is already connected, it will be called instantly. </p>
+
+<h4>
+<a name="clientexecutequery-params-queryoptions-callback" class="anchor" href="#clientexecutequery-params-queryoptions-callback"><span class="octicon octicon-link"></span></a>client.execute(query, [params], [queryOptions], callback)</h4>
+
+<p>The <code>query</code> is the cql query to execute, with <code>?</code> marker for parameter placeholder.</p>
+
+<p>To prepare an statement, provide {prepare: true} in the queryOptions. It will prepare (the first time) and execute the prepared statement.</p>
+
+<p>Using prepared statements increases performance compared to plain executes, especially for repeated queries. 
+It has the additional benefit of providing metadata of the parameters to the driver, 
+<strong>allowing better type mapping between javascript and Cassandra</strong> without the need of additional info (hints) from the user. </p>
+
+<p>In the case the query is already being prepared on a host, it queues the executing of a prepared statement on that
+host until the preparing finished (the driver will not issue a request to prepare statement more than once).</p>
+
+<p><code>callback</code> should take two arguments err and result.</p>
+
+<p><code>queryOptions</code> is an Object that may contain the following optional properties:</p>
+
+<ul>
+<li>
+<code>prepare</code>: if set, prepares the query (once) and executes the prepared statement.</li>
+<li>
+<code>consistency</code>: the consistency level for the operation (defaults to one).
+The possible consistency levels are defined in <code>driver.types.consistencies</code>.</li>
+<li>
+<code>fetchSize</code>: The maximum amount of rows to be retrieved per request (defaults to 5000)</li>
+</ul><h5>
+<a name="example-updating-a-row" class="anchor" href="#example-updating-a-row"><span class="octicon octicon-link"></span></a>Example: Updating a row</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">query</span> <span class="o">=</span> <span class="s1">'UPDATE user_profiles SET birth=? WHERE key=?'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">queryOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">consistency</span><span class="o">:</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">types</span><span class="p">.</span><span class="nx">consistencies</span><span class="p">.</span><span class="nx">quorum</span><span class="p">,</span>
+  <span class="nx">prepare</span><span class="o">:</span> <span class="kc">true</span><span class="p">};</span>
+<span class="kd">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="p">[</span><span class="k">new</span> <span class="nb">Date</span><span class="p">(</span><span class="mi">1942</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="s1">'jimi-hendrix'</span><span class="p">];</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="nx">query</span><span class="p">,</span> <span class="nx">params</span><span class="p">,</span> <span class="nx">queryOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Something when wrong'</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Row updated on the cluster'</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="clienteachrowquery-params-queryoptions-rowcallback-endcallback" class="anchor" href="#clienteachrowquery-params-queryoptions-rowcallback-endcallback"><span class="octicon octicon-link"></span></a>client.eachRow(query, [params], [queryOptions], rowCallback, endCallback)</h4>
+
+<p>Executes a query and streams the rows as soon as they are received.</p>
+
+<p>It executes <code>rowCallback(n, row)</code> per each row received, where <code>n</code> is the index of the row.</p>
+
+<p>It executes <code>callback(err, rowLength)</code> when all rows have been received or there is an error retrieving the row.</p>
+
+<h5>
+<a name="example-reducing-a-result-set" class="anchor" href="#example-reducing-a-result-set"><span class="octicon octicon-link"></span></a>Example: Reducing a result set</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">client</span><span class="p">.</span><span class="nx">eachRow</span><span class="p">(</span><span class="s1">'SELECT time, temperature FROM temperature WHERE station_id='</span><span class="p">,</span> <span class="p">[</span><span class="s1">'abc'</span><span class="p">],</span>
+  <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">,</span> <span class="nx">row</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//the callback will be invoked per each row as soon as they are received</span>
+    <span class="nx">minTemperature</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="nx">row</span><span class="p">.</span><span class="nx">temperature</span><span class="p">,</span> <span class="nx">minTemperature</span><span class="p">);</span>
+  <span class="p">},</span>
+  <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">rowLength</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'%d rows where returned'</span><span class="p">,</span> <span class="nx">rowLength</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">);</span>
+</pre></div>
+
+<h4>
+<a name="clientbatchqueries-queryoptions-callback" class="anchor" href="#clientbatchqueries-queryoptions-callback"><span class="octicon octicon-link"></span></a>client.batch(queries, [queryOptions], callback)</h4>
+
+<p>Executes batch of queries on an available connection, where <code>queries</code> is an Array of string containing the CQL queries
+ or an Array of objects containing the query and the parameters.</p>
+
+<p><code>callback</code> should take two arguments err and result.</p>
+
+<h5>
+<a name="example-update-multiple-column-families" class="anchor" href="#example-update-multiple-column-families"><span class="octicon octicon-link"></span></a>Example: Update multiple column families</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">userId</span> <span class="o">=</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">types</span><span class="p">.</span><span class="nx">uuid</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">messageId</span> <span class="o">=</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">types</span><span class="p">.</span><span class="nx">uuid</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">queries</span> <span class="o">=</span> <span class="p">[</span>
+  <span class="p">{</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="s1">'INSERT INTO users (id, name) values (?, ?)'</span><span class="p">,</span>
+    <span class="nx">params</span><span class="o">:</span> <span class="p">[</span><span class="nx">userId</span><span class="p">,</span> <span class="s1">'jimi-hendrix'</span><span class="p">]</span>
+  <span class="p">},</span>
+  <span class="p">{</span>
+    <span class="nx">query</span><span class="o">:</span> <span class="s1">'INSERT INTO messages (id, user_id, body) values (?, ?, ?)'</span><span class="p">,</span>
+    <span class="nx">params</span><span class="o">:</span> <span class="p">[</span><span class="nx">messageId</span><span class="p">,</span> <span class="nx">userId</span><span class="p">,</span> <span class="s1">'Message from user jimi-hendrix'</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">];</span>
+<span class="kd">var</span> <span class="nx">queryOptions</span><span class="o">:</span> <span class="p">{</span> <span class="nx">consistency</span><span class="o">:</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">types</span><span class="p">.</span><span class="nx">consistencies</span><span class="p">.</span><span class="nx">quorum</span> <span class="p">};</span>
+<span class="nx">client</span><span class="p">.</span><span class="nx">batch</span><span class="p">(</span><span class="nx">queries</span><span class="p">,</span> <span class="nx">queryOptions</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'The rows were not inserted'</span><span class="p">,</span> <span class="nx">err</span><span class="p">);</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'Data updated on cluster'</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="clientstreamquery-params-queryoptions" class="anchor" href="#clientstreamquery-params-queryoptions"><span class="octicon octicon-link"></span></a>client.stream(query, [params], [queryOptions])</h4>
+
+<p>Executes the query and returns a <a href="http://nodejs.org/api/stream.html#stream_class_stream_readable">Readable Streams2</a> object in <code>objectMode</code>.
+When a row can be read from the stream, it will emit a <code>readable</code> event.
+It can be <strong>piped</strong> downstream and provides automatic pause/resume logic (it buffers when not read).</p>
+
+<p>It executes <code>callback(err)</code> when all rows have been received or there is an error retrieving the row.</p>
+
+<h5>
+<a name="example-reading-the-whole-result-as-stream" class="anchor" href="#example-reading-the-whole-result-as-stream"><span class="octicon octicon-link"></span></a>Example: Reading the whole result as stream</h5>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">client</span><span class="p">.</span><span class="nx">stream</span><span class="p">(</span><span class="s1">'SELECT time1, value1 FROM timeseries WHERE key='</span><span class="p">,</span> <span class="p">[</span><span class="s1">'key123'</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'readable'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//readable is emitted as soon a row is received and parsed</span>
+    <span class="kd">var</span> <span class="nx">row</span><span class="p">;</span>
+    <span class="k">while</span> <span class="p">(</span><span class="nx">row</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">read</span><span class="p">())</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'time %s and value %s'</span><span class="p">,</span> <span class="nx">row</span><span class="p">.</span><span class="nx">time1</span><span class="p">,</span> <span class="nx">row</span><span class="p">.</span><span class="nx">value1</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'end'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">//stream ended, there aren't any more rows</span>
+  <span class="p">})</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'error'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//Something went wrong: err is a response error from Cassandra</span>
+  <span class="p">});</span>
+</pre></div>
+
+<h4>
+<a name="clientshutdowncallback" class="anchor" href="#clientshutdowncallback"><span class="octicon octicon-link"></span></a>client.shutdown([callback])</h4>
+
+<p>Disconnects the pool.</p>
+
+<p>Closes all connections in the pool. Normally, it should be called once in your application lifetime.</p>
+
+<p>The optional <code>callback</code> parameter will be executed when the pool is disconnected.</p>
+
+<hr><h3>
+<a name="types" class="anchor" href="#types"><span class="octicon octicon-link"></span></a>types</h3>
+
+<p>The <code>types</code> module contains field definitions that are useful to interact with Cassandra nodes.</p>
+
+<h4>
+<a name="consistencies" class="anchor" href="#consistencies"><span class="octicon octicon-link"></span></a>consistencies</h4>
+
+<p>Object that contains the CQL consistencies defined as properties. For example: <code>consistencies.one</code>, <code>consistencies.quorum</code>, ...</p>
+
+<h4>
+<a name="datatypes" class="anchor" href="#datatypes"><span class="octicon octicon-link"></span></a>dataTypes</h4>
+
+<p>Object that contains all the <a href="http://cassandra.apache.org/doc/cql3/CQL.html#types">CQL data types</a> defined as properties.</p>
+
+<h4>
+<a name="responseerrorcodes" class="anchor" href="#responseerrorcodes"><span class="octicon octicon-link"></span></a>responseErrorCodes</h4>
+
+<p>Object containing all the possible response error codes returned by Cassandra defined as properties.</p>
+
+<h4>
+<a name="long" class="anchor" href="#long"><span class="octicon octicon-link"></span></a>Long()</h4>
+
+<p>Constructs a 64-bit two's-complement integer. See <a href="http://docs.closure-library.googlecode.com/git/class_goog_math_Long.html">Long API Documentation</a>.</p>
+
+<h4>
+<a name="timeuuid" class="anchor" href="#timeuuid"><span class="octicon octicon-link"></span></a>timeuuid()</h4>
+
+<p>Function to generate a uuid <strong>v1</strong>. It uses <a href="https://github.com/broofa/node-uuid">node-uuid</a> module to generate and accepts the same arguments.</p>
+
+<h4>
+<a name="uuid" class="anchor" href="#uuid"><span class="octicon octicon-link"></span></a>uuid()</h4>
+
+<p>Function to generate a uuid <strong>v4</strong>. It uses <a href="https://github.com/broofa/node-uuid">node-uuid</a> module to generate and accepts the same arguments.</p>
+
+<h3>
+<a name="policies" class="anchor" href="#policies"><span class="octicon octicon-link"></span></a>policies</h3>
+
+<p>The <code>policies</code> module contains load balancing, retry and reconnection classes.</p>
+
+<h4>
+<a name="loadbalancing" class="anchor" href="#loadbalancing"><span class="octicon octicon-link"></span></a>loadBalancing</h4>
+
+<p>Load balancing policies lets you decide which node of the cluster will be used for each query.</p>
+
+<ul>
+<li>
+<strong>RoundRobinPolicy</strong>: This policy yield nodes in a round-robin fashion (default).</li>
+<li>
+<strong>DCAwareRoundRobinPolicy</strong>: A data-center aware round-robin load balancing policy. This policy provides round-robin 
+queries over the node of the local data center. It also includes in the query plans returned a configurable 
+number of hosts in the remote data centers, but those are always tried after the local nodes.</li>
+</ul><p>To use it, you must provide load balancing policy the instance in the <code>clientOptions</code> of the <code>Client</code> instance.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">//You can specify the local dc relatively to the node.js app</span>
+<span class="kd">var</span> <span class="nx">localDc</span> <span class="o">=</span> <span class="s1">'us-east'</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">lbPolicy</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">policies</span><span class="p">.</span><span class="nx">loadBalancing</span><span class="p">.</span><span class="nx">DCAwareRoundRobinPolicy</span><span class="p">(</span><span class="nx">localDc</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">clientOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">policies</span><span class="o">:</span> <span class="p">{</span><span class="nx">loadBalancing</span><span class="o">:</span> <span class="nx">loadBalancingPolicy</span><span class="p">}</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">Client</span><span class="p">(</span><span class="nx">clientOptions</span><span class="p">);</span>
+</pre></div>
+
+<p>Load balancing policy classes inherit from <strong>LoadBalancingPolicy</strong>. If you want make your own policy, you should use the same base class.</p>
+
+<h4>
+<a name="retry" class="anchor" href="#retry"><span class="octicon octicon-link"></span></a>retry</h4>
+
+<p>Retry policies lets you configure what the driver should do when there certain types of exceptions from Cassandra are received.</p>
+
+<ul>
+<li>
+<strong>RetryPolicy</strong>: Default policy and base class for retry policies. 
+It retries once in case there is a read or write timeout and the alive replicas are enough to satisfy the consistency level. </li>
+</ul><h4>
+<a name="reconnection" class="anchor" href="#reconnection"><span class="octicon octicon-link"></span></a>reconnection</h4>
+
+<p>Reconnection policies lets you configure when the driver should try to reconnect to a Cassandra node that appears to be down.</p>
+
+<ul>
+<li>
+<strong>ConstantReconnectionPolicy</strong>: It waits a constant time between each reconnection attempt.</li>
+<li>
+<strong>ExponentialReconnectionPolicy</strong>: waits exponentially longer between each reconnection attempt, until maximum delay is reached. </li>
+</ul><h3>
+<a name="auth" class="anchor" href="#auth"><span class="octicon octicon-link"></span></a>auth</h3>
+
+<p>The <code>auth</code> module provides the classes required for authentication.</p>
+
+<ul>
+<li>
+<strong>PlainTextAuthProvider</strong>: Authentication provider for Cassandra's PasswordAuthenticator.</li>
+</ul><p>Using an authentication provider on an auth-enabled Cassandra cluster:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="kd">var</span> <span class="nx">authProvider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">auth</span><span class="p">.</span><span class="nx">PlainTextAuthProvider</span><span class="p">(</span><span class="s1">'my_user'</span><span class="p">,</span> <span class="s1">'p@ssword1!'</span><span class="p">);</span>
+<span class="c1">//Setting the auth provider in the clientOptions</span>
+<span class="kd">var</span> <span class="nx">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">driver</span><span class="p">.</span><span class="nx">Client</span><span class="p">({</span><span class="nx">authProvider</span><span class="o">:</span> <span class="nx">authProvider</span><span class="p">});</span>
+</pre></div>
+
+<p>Authenticator provider classes inherit from <strong>AuthProvider</strong>. If you want to create your own auth provider, use the that as your base class. </p>
+
+<hr><h2>
+<a name="logging" class="anchor" href="#logging"><span class="octicon octicon-link"></span></a>Logging</h2>
+
+<p>Instances of <code>Client()</code> are <code>EventEmitter</code> and emit <code>log</code> events:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="nx">client</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'log'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">level</span><span class="p">,</span> <span class="nx">className</span><span class="p">,</span> <span class="nx">message</span><span class="p">,</span> <span class="nx">furtherInfo</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'log event: %s -- %s'</span><span class="p">,</span> <span class="nx">level</span><span class="p">,</span> <span class="nx">message</span><span class="p">);</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>The <code>level</code> being passed to the listener can be <code>verbose</code>, <code>info</code>, <code>warning</code> or <code>error</code>.</p>
+
+<h2>
+<a name="data-types" class="anchor" href="#data-types"><span class="octicon octicon-link"></span></a>Data types</h2>
+
+<p>Cassandra's bigint data types are parsed as <a href="https://github.com/dcodeIO/Long.js">Long</a>.</p>
+
+<p>List / Set datatypes are encoded from / decoded to Javascript Arrays.</p>
+
+<p>Map datatype are encoded from / decoded to Javascript objects with keys as props.</p>
+
+<p>Decimal and Varint are not parsed yet, they are yielded as byte Buffers.</p>
+
+<h2>
+<a name="faq" class="anchor" href="#faq"><span class="octicon octicon-link"></span></a>FAQ</h2>
+
+<h4>
+<a name="which-cassandra-versions-does-this-driver-support" class="anchor" href="#which-cassandra-versions-does-this-driver-support"><span class="octicon octicon-link"></span></a>Which Cassandra versions does this driver support?</h4>
+
+<p>The beta version of this driver supports any Cassandra version greater than 2.0 and above.
+On future versions, any Cassandra version from 1.2 will be supported.</p>
+
+<h4>
+<a name="which-cql-version-does-this-driver-support" class="anchor" href="#which-cql-version-does-this-driver-support"><span class="octicon octicon-link"></span></a>Which CQL version does this driver support?</h4>
+
+<p>It supports <a href="http://cassandra.apache.org/doc/cql3/CQL.html">CQL3</a>.</p>
+
+<h4>
+<a name="should-i-create-a-client-instance-per-repository-module" class="anchor" href="#should-i-create-a-client-instance-per-repository-module"><span class="octicon octicon-link"></span></a>Should I create a <code>Client</code> instance per repository module?</h4>
+
+<p>Normally you should use 1 client instance per application domain, you should share that instance between modules within your application.</p>
+
+<h4>
+<a name="should-i-shutdown-the-pool-after-executing-a-query" class="anchor" href="#should-i-shutdown-the-pool-after-executing-a-query"><span class="octicon octicon-link"></span></a>Should I shutdown the pool after executing a query?</h4>
+
+<p>No, you should only call <code>client.shutdown</code> once in your application lifetime.</p>
+
+<h2>
+<a name="credits" class="anchor" href="#credits"><span class="octicon octicon-link"></span></a>Credits</h2>
+
+<p>This driver is based on the original work of <a href="https://github.com/jorgebay">Jorge Bay</a> on <a href="https://github.com/jorgebay/node-cassandra-cql">node-cassandra-cql</a> and adds a series of advanced features that are common across all other <a href="https://github.com/datastax">DataStax drivers</a> for Apache Cassandra.</p>
+
+<p>The development effort to provide an up to date, high performance, fully featured Node.js Driver for Apache Cassandra will continue on this project, while <a href="https://github.com/jorgebay/node-cassandra-cql">node-cassandra-cql</a> will be discontinued.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright 2014 DataStax</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at</p>
+
+<p><a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/datastax">datastax</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
