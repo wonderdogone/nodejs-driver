@@ -12,10 +12,11 @@ Node.js driver for Apache Cassandra. This driver works exclusively with the Cass
 ## Basics
 
 - [Download the driver][download]
-- [Getting started](start)
+- [Getting started](getting-started)
 - [CQL types to javascript types](datatypes)
 - [FAQ](faq)
-- [Release notes](https://github.com/datastax/nodejs-driver/releases)
+- [Release notes][releases]
 
 
-  [download]: https://www.npmjs.org/package/cassandra-driver
+ [download]: https://www.npmjs.org/package/cassandra-driver
+ [releases]: https://github.com/datastax/nodejs-driver/releases
