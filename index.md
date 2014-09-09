@@ -1,20 +1,21 @@
 ---
 layout: default
 title: DataStax Node.js driver for Apache Cassandra
+active: home
 ---
+
 
 # DataStax Node.js driver for Apache Cassandra
 
 Node.js driver for Apache Cassandra. This driver works exclusively with the Cassandra Query Language version 3 (CQL3) and Cassandra's native protocol.
 
-## Basic usage
+## Basics
 
-<pre><code class="javascript">
-var driver = require('cassandra-driver');
-var client = new driver.Client({contactPoints: ['host1', 'host2'], keyspace: 'ks1'});
-var query = 'SELECT email, last_name FROM user_profiles WHERE key=?';
-client.execute(query, ['guy'], function(err, result) {
-  console.log('got user profile with email ' + result.rows[0].email);
-});
-</code>
-</pre>
+- [Download the driver][download]
+- [Getting started](start)
+- [CQL types to javascript types](datatypes)
+- [FAQ](faq)
+- [Release notes](https://github.com/datastax/nodejs-driver/releases)
+
+
+  [download]: https://www.npmjs.org/package/cassandra-driver
