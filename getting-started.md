@@ -16,7 +16,8 @@ To connect to a Cassandra cluster, you need to provide at least 1 node of the cl
  
 Typically you create only 1 `Client` instance for a given Cassandra cluster and use it across your application.
 
-<pre><code class="javascript">
+<pre>
+<code class="javascript">
 var driver = require('cassandra-driver');
 var client = new driver.Client({contactPoints: ['host1']});
 client.connect(function (err) {
@@ -34,7 +35,8 @@ Even though calling `#connect()` is not required (the execute method internally 
 
 The `#execute()` method can be used to send a CQL query to a Cassandra node, a simple way to use would be to provide a query and a callback.
 
-<pre><code class="javascript">
+<pre>
+<code class="javascript">
 client.execute("SELECT name, email, birthdate FROM users WHERE key = 'mick-jagger'", function (err, result) {
   var user = results.rows[0];
   //The row is an Object with column names as property keys. 
@@ -47,7 +49,8 @@ client.execute("SELECT name, email, birthdate FROM users WHERE key = 'mick-jagge
 
 Instead of hard coding your parameters in your query, you can use parameter markers in your queries and provide the parameters as an Array.
  
-<pre><code class="javascript">
+<pre>
+<code class="javascript">
 client.execute('SELECT name, email, birthdate FROM users WHERE key = ?', ['mick-jagger'], function (err, result) {
 
 });
@@ -62,7 +65,8 @@ but there is only a small number of different queries for a given schema), you c
 Using prepared statements increases performance compared to plain executes, especially for repeated queries as the query only needs to be parsed once by the cluster. 
 It has the additional benefit of providing metadata of the parameters to the driver, allowing better type mapping between javascript and Cassandra without the need of additional info (hints) from the user.
 
-<pre><code class="javascript">
+<pre>
+<code class="javascript">
 //Set the prepare flag in your queryOptions
 client.execute('SELECT name, email, birthdate FROM users WHERE key = ?', ['mick-jagger'], {prepare: true}, function (err, result) {
 
@@ -76,29 +80,34 @@ If you want to know more about the how
 
 You can use the `#execute()` method to execute any CQL query.
 
-<pre><code class="javascript">
+<pre>
+<code class="javascript">
 var params = ['mick-jagger', 'Sir Mick Jagger', 'mick@rollingstones.com', new Date(1943, 6, 26)];
 client.execute('INSERT INTO users (key, name, email, birthdate) VALUES (?, ?, ?)', params, function (err) {
   //Inserted in the cluster
 });
 </code>
+</pre>
 
 ### Setting the consistency level
 
 To specify how consistent the data must be for a given read or write operation, you can set the [consistency level][consistency] per query
 
-<pre><code class="javascript">
+<pre>
+<code class="javascript">
 client.execute(query, params, {consistency: types.consistencies.quorum}, function (err) {
   //This callback will be called once it has been written in the number of replicas
   //satisfying the consistency level specified.
 });
 </code>
+</pre>
 
 Or you can provide a default consistency level for all your queries when creating the `Client` instance (defaults to `one`).
 
 <pre><code class="javascript">
 var client = new Client({queryOptions: {consistency: types.consistencies.quorum}});
 </code>
+</pre>
 
 ## Authentication (optional)
 
@@ -111,4 +120,4 @@ var client = new Client({authProvider: authProvider});
 </code>
 </pre>
 
- [consistency]: http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html
+[consistency]: http://www.datastax.com/documentation/cassandra/2.0/cassandra/dml/dml_config_consistency_c.html
