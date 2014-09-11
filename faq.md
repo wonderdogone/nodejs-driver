@@ -14,6 +14,10 @@ On future versions, any Cassandra version from 1.2 will be supported.
 ## Which CQL version does this driver support?
 It supports [CQL3](http://cassandra.apache.org/doc/cql3/CQL.html).
 
+## How to generate a uuid and a time-based uuid
+
+[You can use `uuid()` and `timeuuid()` functions in the types module](datatypes#uuid).
+
 ## Should I create a `Client` instance per module in my app?
 Normally you should use 1 client instance per application, you should share that instance between modules within your application.
 

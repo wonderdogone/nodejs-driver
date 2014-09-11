@@ -25,7 +25,7 @@ bigint | [Long][long]
 blob | Buffer
 boolean | Boolean
 counter | [Long][long]
-decimal | not supported
+decimal | _not supported_
 double | Number
 float | Number
 inet | Buffer
@@ -36,10 +36,10 @@ set | Array
 text | String
 timestamp | Date
 timeuuid | String
-tuple | not supported yet
+tuple | _not supported yet_
 uuid | String
 varchar | String
-varint | not supported
+varint | _not supported_
 
 ## Encoding data
 
@@ -82,6 +82,25 @@ client.execute('SELECT * FROM table1 where key = ?', [key], {hints: ['int']}, ca
 </code>
 </pre>
 
+## bigint, uuid and timeuuid CQL types <a name="uuid"></a><a name="bigint"></a>
+
+Even though ECMAScript does not provide a way to represent these data types, the Node.js Cassandra driver provides ways to use these types.
+
+<pre><code class="javascript">
+var cassandra = require('cassandra-driver');
+//generate a new v4 uuid
+var id1 = cassandra.types.uuid();
+//generate a new v1 uuid
+var id2 = cassandra.types.timeuuid();
+//big int value
+var bigIntValue = new cassandra.types.Long.fromString("576460752303423511");
+</code>
+</pre>
+
+Long is supported using [Long][long] module that it is a wrapper of [Google Closure's Long][closure-long].
+
+Uuid is supported using [node-uuid][uuid] module. 
 
 [uuid]: https://github.com/broofa/node-uuid
 [long]: https://github.com/dcodeIO/Long.js
+[closure-long]: http://docs.closure-library.googlecode.com/git/class_goog_math_Long.html
