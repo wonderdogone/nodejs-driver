@@ -18,8 +18,8 @@ Typically you create only 1 `Client` instance for a given Cassandra cluster and 
 
 <pre>
 <code class="javascript">
-var driver = require('cassandra-driver');
-var client = new driver.Client({contactPoints: ['host1']});
+var cassandra = require('cassandra-driver');
+var client = new cassandra.Client({contactPoints: ['host1']});
 client.connect(function (err) {
   
 });
@@ -74,7 +74,7 @@ client.execute('SELECT name, email, birthdate FROM users WHERE key = ?', ['mick-
 </code>
 </pre>
 
-If you want to know more about the how 
+See the [data types documentation to see how CQL types are mapped to javascript types](datatypes). 
 
 ## Inserting data
 
@@ -114,7 +114,7 @@ var client = new Client({queryOptions: {consistency: types.consistencies.quorum}
 Using an authentication provider on an auth-enabled Cassandra cluster:
 
 <pre><code class="javascript">
-var authProvider = new driver.auth.PlainTextAuthProvider('my_user', 'p@ssword1!');
+var authProvider = new cassandra.auth.PlainTextAuthProvider('my_user', 'p@ssword1!');
 //Set the auth provider in the clientOptions when creating the Client instance
 var client = new Client({authProvider: authProvider});
 </code>
