@@ -25,7 +25,7 @@ bigint | [Long][long]
 blob | Buffer
 boolean | Boolean
 counter | [Long][long]
-decimal | _not supported_
+decimal | Buffer
 double | Number
 float | Number
 inet | Buffer
@@ -39,7 +39,7 @@ timeuuid | String
 tuple | _not supported yet_
 uuid | String
 varchar | String
-varint | _not supported_
+varint | Buffer
 
 ## Encoding data
 

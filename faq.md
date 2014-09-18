@@ -5,7 +5,7 @@ active: faq
 ---
 
 
-# FAQ
+# FAQ - Node.js Cassandra
 
 ## Which Cassandra versions does this driver support?
 The beta version of this driver supports any Cassandra version greater than 2.0 and above.
