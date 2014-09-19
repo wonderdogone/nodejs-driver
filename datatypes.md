@@ -67,8 +67,7 @@ Using the previous example, setting the prepare flag in the queryOptions will fi
 <pre><code class="javascript">
 //prepare the query before execution
 client.execute('SELECT * FROM table1 where key = ?', [key], {prepare: true}, callback);
-</code>
-</pre>
+</code></pre>
 
 When using prepare statements, the driver will prepare the statement once on each host to execute multiple times.
 
