@@ -2,6 +2,7 @@
 layout: default
 title: Load balancing policies - Node.js driver for Cassandra
 active: start
+redirect_url: http://www.datastax.com/documentation/developer/nodejs-driver/1.0/common/drivers/reference/tuningPolicies.html
 ---
 
 # Load balancing - Node.js driver for Cassandra

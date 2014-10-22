@@ -2,6 +2,7 @@
 layout: default
 title: Fetching large result sets - Node.js Cassandra
 active: start
+redirect_url: http://www.datastax.com/documentation/developer/nodejs-driver/1.0/nodejs-driver/reference/paging.html
 ---
 
 

@@ -2,6 +2,7 @@
 layout: default
 title: Cassandra CQL types to javascript types - DataStax Node.js driver for Apache Cassandra
 active: datatypes
+redirect_url: http://www.datastax.com/documentation/developer/nodejs-driver/1.0/nodejs-driver/reference/nodejs2Cql3Datatypes.html
 ---
 
 # CQL types to javascript types

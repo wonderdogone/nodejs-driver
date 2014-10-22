@@ -2,6 +2,7 @@
 layout: default
 title: FAQ - DataStax Node.js driver for Apache Cassandra
 active: faq
+redirect_url: http://www.datastax.com/documentation/developer/nodejs-driver/1.0/nodejs-driver/faq/njdFaq.html
 ---
 
 

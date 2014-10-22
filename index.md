@@ -2,6 +2,7 @@
 layout: default
 title: DataStax Node.js driver for Apache Cassandra
 active: home
+redirect_url: http://www.datastax.com/documentation/developer/nodejs-driver/1.0/common/drivers/introduction/introArchOverview.html
 ---
 
 
