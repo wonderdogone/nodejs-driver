@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title>{{ page.title }}</title>
-    {% if (defined?(page.redirect_url)).nil? %}
+    {% if page.redirect_url %}
         <meta http-equiv="refresh" content="0; url={{page.redirect_url}}">
         <link rel="canonical" href="{{page.redirect_url}}" />
     {% endif %}
